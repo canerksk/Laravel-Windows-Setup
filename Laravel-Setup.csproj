@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{7C3B4A61-6DDD-4275-BC9D-77ABD7350035}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>Laravel_Setup</RootNamespace>
     <AssemblyName>Laravel-Setup</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
