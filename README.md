@@ -7,7 +7,7 @@ Proje adını, kurulacak dizini ve laravel sürümünü seçtikten sonra kur but
 
 C# .NET Framework 4.7.2 sürümü kullanılarak yapılmıştır.
 
-Windows işletim sisteminizde php veya composer kurulu olup olmadığını kontrol eder. Eğer php veya composer kurulu değilse program kurulum yapmaz. PHP veya Composer kurulu olması gerekmektedir.
+Windows işletim sisteminizde php veya composer kurulu olup olmadığını "Sistem Ortam Değişkenleri" üzerinden kontrol eder. Eğer php veya composer kurulu değilse veya php/composer kurulu ama sistem değişkenlerine girilmemişse program kurulum yapmaz. PHP veya Composer kurulu olması gerekmektedir.
 
 Laraveli bilgisayarınıza composer kullanarak kurmaktadır.
 
