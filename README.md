@@ -11,4 +11,4 @@ Windows işletim sisteminizde php veya composer kurulu olup olmadığını kontr
 
 Laraveli bilgisayarınıza composer kullanarak kurmaktadır.
 
-![image](https://user-images.githubusercontent.com/10347131/233321588-269a6c5c-cf61-4120-b2cf-818b8810065b.png)
+![image](https://user-images.githubusercontent.com/10347131/233322606-b6e5c728-7cc6-443d-bd40-19375cba8222.png)
