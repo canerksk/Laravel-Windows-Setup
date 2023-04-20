@@ -1,59 +1,110 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Runtime.Remoting.Lifetime;
 using System.Text;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-
+using System.Runtime.Caching;
 
 namespace Laravel_Setup
 {
+
     public partial class Form1 : Form
     {
 
         private static StringBuilder output = new StringBuilder();
+        private const string BaseUrl = "https://api.github.com";
+        private const string Owner = "laravel";
+        private const string Repo = "laravel";
+        public static string LocalReleaseFile = Path.Combine(Application.StartupPath, "releases.json");
+
 
         public Form1()
         {
             InitializeComponent();
         }
 
-        private async void Form1_Load(object sender, EventArgs e)
+        // Uzak Urlden Releaseleri getir.
+        private static List<Release> GetAllReleases()
+        {
+            var releasesDiffList = new List<Release>();
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("User-Agent", "C# HttpClient");
+            var page = 1;
+            while (true)
+            {
+                var url = $"{BaseUrl}/repos/{Owner}/{Repo}/releases?page={page}&per_page=1000";
+                var response = client.GetAsync(url).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = response.Content.ReadAsStringAsync().Result;
+                    var pageReleases = JsonConvert.DeserializeObject<List<Release>>(json);
+                    if (pageReleases.Count == 0)
+                    {
+                        break;
+                    }
+                    releasesDiffList.AddRange(pageReleases);
+                    page++;
+                }
+                else
+                {
+                    throw new Exception($"Error: {response.StatusCode} - {response.ReasonPhrase}");
+                }
+            }
+            return releasesDiffList;
+        }
+
+        // Yerel Dosyadan Releaseleri getir.
+        private static List<Release> GetReleasesFromFile(string filePath)
+        {
+            var json = File.ReadAllText(filePath);
+            return JsonConvert.DeserializeObject<List<Release>>(json);
+        }
+
+
+        // Release Json List Elements
+        public class Release
+        {
+            public string Name { get; set; }
+            public string Tag_Name { get; set; }
+            public string Body { get; set; }
+            public DateTimeOffset Published_At { get; set; }
+        }
+        
+        private void Form1_Load(object sender, EventArgs e)
         {
 
             installdir_textbox.Text = Application.StartupPath;
 
-            var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("laravel", "1"));
 
-            var repo = "laravel/laravel";
-            var contentsUrl = $"https://api.github.com/repos/{repo}/releases?per_page=100";
-            var contentsJson = await httpClient.GetStringAsync(contentsUrl);
-            var contents = (JArray)JsonConvert.DeserializeObject(contentsJson);
-
-            foreach (var file in contents)
+            if (!File.Exists(LocalReleaseFile))
             {
-                var fileType = (string)file["type"];
+                Console.WriteLine("Uzaktan getir.");
 
-                var TagName = file["tag_name"];
-                string VersionName = TagName.ToString().Substring(1, TagName.ToString().Length - 1);
-
-                //Console.WriteLine(file["tag_name"]);
-                comboBox1.Items.Add(VersionName);
-                //if (fileType == "dir")
-                //{
-                // var directoryContentsUrl = (string)file["url"];
-                // Console.WriteLine($"DIR: {directoryContentsUrl}");
-                //}
-                // else if (fileType == "file")
-                //{
-                //var downloadUrl = (string)file["download_url"];
-                // Console.WriteLine($"DOWNLOAD: {downloadUrl}");
-                //}
+                var releasesDiff = GetAllReleases();
+                var json = JsonConvert.SerializeObject(releasesDiff);
+                File.WriteAllText(LocalReleaseFile, json);
+            }
+            else
+            {
+                Console.WriteLine("Yerelden getir.");
+                var releasesLocal = GetReleasesFromFile(LocalReleaseFile);
+                foreach (var release in releasesLocal)
+                {
+                    if (!string.IsNullOrEmpty(release.Tag_Name))
+                    {
+                        string VersionName = release.Tag_Name.ToString().Substring(1, release.Tag_Name.ToString().Length - 1);
+                        comboBox1.Items.Add(VersionName);
+                        //Console.WriteLine($"Name: {release.Name}, Tag Name: {release.Tag_Name}, Published At: {release.Published_At}");
+                    }
+                }
             }
 
             //projectname_textbox.Text = "";
@@ -167,7 +218,84 @@ namespace Laravel_Setup
             Console.ReadLine();
             listBox1.Items.Add("Laravel " + comboBox1.Text + " " + projectname_textbox.Text + " adıyla başarıyla kuruldu...");
             buildButton.Enabled = true;
+
+            string AppServiceProviderPath = Path.Combine(Application.StartupPath, projectname_textbox.Text, "app", "Provides", "AppServiceProvider.php");
+            if (File.Exists(AppServiceProviderPath))
+            {
+
+                StreamWriter writer = new StreamWriter(AppServiceProviderPath);
+                StreamReader reader = new StreamReader(AppServiceProviderPath);
+
+                // Use
+                int satirNoUse = 6;
+                string yeniIcerikUse = "use Illuminate\\Support\\Facades\\Schema;";
+
+                string lineUse;
+                for (int i = 1; i < satirNoUse; i++)
+                {
+                    lineUse = reader.ReadLine();
+                }
+                writer.WriteLine("\n");
+                writer.WriteLine(yeniIcerikUse);
+                writer.WriteLine("\n");
+                writer.Close();
+                reader.Close();
+
+                // Code
+                int satirNoCode = 22;
+                string yeniIcerikCode = " Schema::defaultStringLength(" + 191 + ");";
+                string lineCode;
+                for (int i = 1; i < satirNoCode; i++)
+                {
+                    lineCode = reader.ReadLine();
+                }
+                writer.WriteLine("\n");
+                writer.WriteLine(yeniIcerikCode);
+                writer.WriteLine("\n");
+                writer.Close();
+                reader.Close();
+
+            }
+
+
+
         }
+
+        private void refreshversion_button_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(LocalReleaseFile))
+            {
+                File.Delete(LocalReleaseFile);
+                listBox1.Items.Add("Yerel dosya silindi...");
+
+                Console.WriteLine("Uzaktan getir.");
+
+                var releasesDiff = GetAllReleases();
+                var json = JsonConvert.SerializeObject(releasesDiff);
+                File.WriteAllText(LocalReleaseFile, json);
+                listBox1.Items.Add("Veriler uzak bağlantıdan getiriliyor.");
+
+                Console.WriteLine("Yerelden getir.");
+                var releasesLocal = GetReleasesFromFile(LocalReleaseFile);
+                foreach (var release in releasesLocal)
+                {
+                    if (!string.IsNullOrEmpty(release.Tag_Name))
+                    {
+                        string VersionName = release.Tag_Name.ToString().Substring(1, release.Tag_Name.ToString().Length - 1);
+                        comboBox1.Items.Add(VersionName);
+                    }
+                }
+                listBox1.Items.Add("Veriler yerel dosyaya işleniyor.");
+
+            }
+            else
+            {
+                MessageBox.Show("Release listesi zaten yok.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
+            }
+
+        }
+
 
 
     }

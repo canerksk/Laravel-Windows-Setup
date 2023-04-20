@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -38,6 +37,9 @@
             this.installdir_textbox = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.buildButton = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.refreshversion_button = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -77,9 +79,9 @@
             // listBox1
             // 
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(11, 106);
+            this.listBox1.Location = new System.Drawing.Point(11, 145);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(322, 199);
+            this.listBox1.Size = new System.Drawing.Size(322, 160);
             this.listBox1.TabIndex = 4;
             // 
             // comboBox1
@@ -88,7 +90,7 @@
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(117, 77);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(217, 21);
+            this.comboBox1.Size = new System.Drawing.Size(163, 21);
             this.comboBox1.TabIndex = 5;
             // 
             // installdir_textbox
@@ -118,11 +120,41 @@
             this.buildButton.UseVisualStyleBackColor = true;
             this.buildButton.Click += new System.EventHandler(this.buildButton_Click);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(12, 117);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(99, 13);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "defaultStringLength";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(117, 114);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(54, 20);
+            this.textBox1.TabIndex = 10;
+            this.textBox1.Text = "191";
+            // 
+            // refreshversion_button
+            // 
+            this.refreshversion_button.Location = new System.Drawing.Point(286, 75);
+            this.refreshversion_button.Name = "refreshversion_button";
+            this.refreshversion_button.Size = new System.Drawing.Size(48, 23);
+            this.refreshversion_button.TabIndex = 11;
+            this.refreshversion_button.Text = "Yenile";
+            this.refreshversion_button.UseVisualStyleBackColor = true;
+            this.refreshversion_button.Click += new System.EventHandler(this.refreshversion_button_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(345, 349);
+            this.Controls.Add(this.refreshversion_button);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.buildButton);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.installdir_textbox);
@@ -132,7 +164,6 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Laravel Windows Installer";
@@ -153,6 +184,9 @@
         private System.Windows.Forms.TextBox installdir_textbox;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button buildButton;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button refreshversion_button;
     }
 }
 
