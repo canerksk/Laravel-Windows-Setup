@@ -158,12 +158,12 @@ namespace Laravel_Setup
                 return;
             }
 
-            if (InstalledComposer != true)
-            {
-                buildButton.Enabled = false;
-                listBox1.Items.Add("Sisteminizde kurulu Composer bulunamadı");
-                return;
-            }
+            //if (InstalledComposer != true)
+            //{
+                //buildButton.Enabled = false;
+                //listBox1.Items.Add("Sisteminizde kurulu Composer bulunamadı");
+                //return;
+            //}
 
         }
 
@@ -214,52 +214,119 @@ namespace Laravel_Setup
             process.WaitForExit();
             process.Close();
 
-            Console.WriteLine("\n\nPress any key to exit.");
-            Console.ReadLine();
+            //Console.WriteLine("\n\nPress any key to exit.");
+            //Console.ReadLine();
+
             listBox1.Items.Add("Laravel " + comboBox1.Text + " " + projectname_textbox.Text + " adıyla başarıyla kuruldu...");
+
             buildButton.Enabled = true;
-
-            string AppServiceProviderPath = Path.Combine(Application.StartupPath, projectname_textbox.Text, "app", "Provides", "AppServiceProvider.php");
-            if (File.Exists(AppServiceProviderPath))
-            {
-
-                StreamWriter writer = new StreamWriter(AppServiceProviderPath);
-                StreamReader reader = new StreamReader(AppServiceProviderPath);
-
-                // Use
-                int satirNoUse = 6;
-                string yeniIcerikUse = "use Illuminate\\Support\\Facades\\Schema;";
-
-                string lineUse;
-                for (int i = 1; i < satirNoUse; i++)
-                {
-                    lineUse = reader.ReadLine();
-                }
-                writer.WriteLine("\n");
-                writer.WriteLine(yeniIcerikUse);
-                writer.WriteLine("\n");
-                writer.Close();
-                reader.Close();
-
-                // Code
-                int satirNoCode = 22;
-                string yeniIcerikCode = " Schema::defaultStringLength(" + 191 + ");";
-                string lineCode;
-                for (int i = 1; i < satirNoCode; i++)
-                {
-                    lineCode = reader.ReadLine();
-                }
-                writer.WriteLine("\n");
-                writer.WriteLine(yeniIcerikCode);
-                writer.WriteLine("\n");
-                writer.Close();
-                reader.Close();
-
-            }
-
-
+            ayarlargroupBox.Visible = Enabled;
 
         }
+
+        private void WriteAppServiceProvider()
+        {
+            string AppServiceProviderPath = Path.Combine(Application.StartupPath, projectname_textbox.Text, "app", "Providers", "AppServiceProvider.php");
+
+            if (defaultStringLengthtextBox.Text.Length <= 0)
+            {
+                listBox1.Items.Add("Bir defaultstringlength uzunluğu giriniz.");
+                return;
+            }
+            if (string.IsNullOrEmpty(defaultStringLengthtextBox.Text))
+            {
+                listBox1.Items.Add("Bir defaultstringlength uzunluğu giriniz.");
+                return;
+            }
+            string DefaultStringLenTextBox = defaultStringLengthtextBox.Text;
+            int DefaultStringLenInteger;
+            bool _DefaultStringLenIntegerSuccess = int.TryParse(DefaultStringLenTextBox, out DefaultStringLenInteger);
+
+            if (!_DefaultStringLenIntegerSuccess)
+            {
+                listBox1.Items.Add("Bir defaultstringlength olarak bir sayısı giriniz.");
+                return;
+            }
+
+            int DefaultStringLen = int.Parse(DefaultStringLenTextBox);
+
+
+            if (DefaultStringLen <= 0)
+            {
+                listBox1.Items.Add("Bir defaultstringlength uzunluğu giriniz.");
+                return;
+            }
+            if (DefaultStringLen > 255)
+            {
+                listBox1.Items.Add("Bir defaultstringlength 255den yüksek olamaz.s");
+                return;
+            }
+
+            if (File.Exists(AppServiceProviderPath))
+            {
+                // Dosyanın tüm satırlarını okuyun
+                string[] satirlar = File.ReadAllLines(AppServiceProviderPath);
+
+                // Use
+                int satirNoUse = 5;
+                string yazdirilacakMetinUse = "use Illuminate\\Support\\Facades\\Schema;";
+
+
+                // Dosyanın her bir satırını kontrol edin
+                for (int i = 0; i < satirlar.Length; i++)
+                {
+                    if (satirlar[i].Contains(yazdirilacakMetinUse))
+                    {
+                        listBox1.Items.Add("use Illuminate\\Support\\Facades\\Schema satırı zaten eklenmiş");
+                        //Console.WriteLine($"Dosyada \"{kontrolMetni}\" metni bulundu. Satır: {i + 1}");
+                        return;
+                    }
+                }
+
+                if (satirNoUse >= 0 && satirNoUse < satirlar.Length)
+                {
+                    Console.WriteLine(satirlar[satirNoUse]);
+                    satirlar[satirNoUse] = yazdirilacakMetinUse;
+                    //satirlar[satirNoUse + 1] = "\n";
+                }
+                else
+                {
+                    // Hedef satır indeksi geçerli değilse veya dosya yeterince satır içermiyorsa bir hata mesajı yazdırabilirsiniz.
+                    Console.WriteLine("1.Hedef satır indeksi geçerli değil veya dosya yeterince satır içermiyor." + satirlar.Length);
+                    return;
+                }
+
+                // defaultStringLength
+                int satirNoKod = 21;
+                string yazdirilacakMetinKod = "Schema::defaultStringLength(" + defaultStringLengthtextBox.Text + ");";
+                if (satirNoKod >= 0 && satirNoKod < satirlar.Length)
+                {
+                    Console.WriteLine(satirlar[satirNoKod]);
+                    //satirlar[satirNoKod] = "\n";
+                    satirlar[satirNoKod] = yazdirilacakMetinKod;
+                    //satirlar[satirNoKod + 1] = "\n";
+                }
+                else
+                {
+                    // Hedef satır indeksi geçerli değilse veya dosya yeterince satır içermiyorsa bir hata mesajı yazdırabilirsiniz.
+                    Console.WriteLine("2.Hedef satır indeksi geçerli değil veya dosya yeterince satır içermiyor." + satirlar.Length);
+                    return;
+                }
+
+                // Dosyanın içeriğini güncelleyin
+                File.WriteAllLines(AppServiceProviderPath, satirlar);
+                Console.WriteLine("Metin başarıyla hedef satıra yazıldı.");
+                listBox1.Items.Add("DefaultStringLength " + 191 + " olarak ayarlandı.");
+
+            }
+            else
+            {
+                listBox1.Items.Add("AppServiceProvider.php dosyası bulunamadı!");
+            }
+
+        }
+
+
 
         private void refreshversion_button_Click(object sender, EventArgs e)
         {
@@ -294,6 +361,11 @@ namespace Laravel_Setup
                 return;
             }
 
+        }
+
+        private void defaultstringlenaddbutton_Click(object sender, EventArgs e)
+        {
+            WriteAppServiceProvider();
         }
 
 

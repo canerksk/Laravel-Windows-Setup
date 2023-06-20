@@ -38,9 +38,12 @@
             this.installdir_textbox = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.buildButton = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.defaultStringLengthlabel = new System.Windows.Forms.Label();
+            this.defaultStringLengthtextBox = new System.Windows.Forms.TextBox();
             this.refreshversion_button = new System.Windows.Forms.Button();
+            this.defaultstringlenaddbutton = new System.Windows.Forms.Button();
+            this.ayarlargroupBox = new System.Windows.Forms.GroupBox();
+            this.ayarlargroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -80,7 +83,7 @@
             // listBox1
             // 
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(11, 145);
+            this.listBox1.Location = new System.Drawing.Point(11, 109);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(322, 160);
             this.listBox1.TabIndex = 4;
@@ -113,30 +116,30 @@
             // 
             // buildButton
             // 
-            this.buildButton.Location = new System.Drawing.Point(11, 314);
+            this.buildButton.Location = new System.Drawing.Point(11, 275);
             this.buildButton.Name = "buildButton";
-            this.buildButton.Size = new System.Drawing.Size(75, 23);
+            this.buildButton.Size = new System.Drawing.Size(75, 36);
             this.buildButton.TabIndex = 8;
             this.buildButton.Text = "Kur";
             this.buildButton.UseVisualStyleBackColor = true;
             this.buildButton.Click += new System.EventHandler(this.buildButton_Click);
             // 
-            // label4
+            // defaultStringLengthlabel
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 117);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(99, 13);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "defaultStringLength";
+            this.defaultStringLengthlabel.AutoSize = true;
+            this.defaultStringLengthlabel.Location = new System.Drawing.Point(22, 18);
+            this.defaultStringLengthlabel.Name = "defaultStringLengthlabel";
+            this.defaultStringLengthlabel.Size = new System.Drawing.Size(99, 13);
+            this.defaultStringLengthlabel.TabIndex = 9;
+            this.defaultStringLengthlabel.Text = "defaultStringLength";
             // 
-            // textBox1
+            // defaultStringLengthtextBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(117, 114);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(54, 20);
-            this.textBox1.TabIndex = 10;
-            this.textBox1.Text = "191";
+            this.defaultStringLengthtextBox.Location = new System.Drawing.Point(134, 14);
+            this.defaultStringLengthtextBox.Name = "defaultStringLengthtextBox";
+            this.defaultStringLengthtextBox.Size = new System.Drawing.Size(54, 20);
+            this.defaultStringLengthtextBox.TabIndex = 10;
+            this.defaultStringLengthtextBox.Text = "191";
             // 
             // refreshversion_button
             // 
@@ -148,14 +151,35 @@
             this.refreshversion_button.UseVisualStyleBackColor = true;
             this.refreshversion_button.Click += new System.EventHandler(this.refreshversion_button_Click);
             // 
+            // defaultstringlenaddbutton
+            // 
+            this.defaultstringlenaddbutton.Location = new System.Drawing.Point(194, 13);
+            this.defaultstringlenaddbutton.Name = "defaultstringlenaddbutton";
+            this.defaultstringlenaddbutton.Size = new System.Drawing.Size(39, 23);
+            this.defaultstringlenaddbutton.TabIndex = 12;
+            this.defaultstringlenaddbutton.Text = "Ekle";
+            this.defaultstringlenaddbutton.UseVisualStyleBackColor = true;
+            this.defaultstringlenaddbutton.Click += new System.EventHandler(this.defaultstringlenaddbutton_Click);
+            // 
+            // ayarlargroupBox
+            // 
+            this.ayarlargroupBox.Controls.Add(this.defaultStringLengthlabel);
+            this.ayarlargroupBox.Controls.Add(this.defaultstringlenaddbutton);
+            this.ayarlargroupBox.Controls.Add(this.defaultStringLengthtextBox);
+            this.ayarlargroupBox.Location = new System.Drawing.Point(91, 275);
+            this.ayarlargroupBox.Name = "ayarlargroupBox";
+            this.ayarlargroupBox.Size = new System.Drawing.Size(242, 39);
+            this.ayarlargroupBox.TabIndex = 13;
+            this.ayarlargroupBox.TabStop = false;
+            this.ayarlargroupBox.Text = "Ayarlar";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(345, 349);
+            this.ClientSize = new System.Drawing.Size(345, 327);
+            this.Controls.Add(this.ayarlargroupBox);
             this.Controls.Add(this.refreshversion_button);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.buildButton);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.installdir_textbox);
@@ -170,6 +194,8 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Laravel Windows Installer";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.ayarlargroupBox.ResumeLayout(false);
+            this.ayarlargroupBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -186,9 +212,11 @@
         private System.Windows.Forms.TextBox installdir_textbox;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button buildButton;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label defaultStringLengthlabel;
+        private System.Windows.Forms.TextBox defaultStringLengthtextBox;
         private System.Windows.Forms.Button refreshversion_button;
+        private System.Windows.Forms.Button defaultstringlenaddbutton;
+        private System.Windows.Forms.GroupBox ayarlargroupBox;
     }
 }
 
